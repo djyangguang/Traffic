@@ -40,6 +40,7 @@ public class WordCount {
         });
         JavaPairRDD<Integer,String> tempwcs =wcs.mapToPair(new PairFunction<Tuple2<String, Integer>, Integer, String>() {
             @Override
+            //Tuple2 元祖里面有2个值得是叫tuple2 一直到tuple23
             public Tuple2<Integer, String> call(Tuple2<String, Integer> integerIntegerTuple2) throws Exception {
                 return new Tuple2<Integer,String>(integerIntegerTuple2._2,integerIntegerTuple2._1);
             }
