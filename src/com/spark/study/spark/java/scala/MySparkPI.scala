@@ -18,6 +18,13 @@ object MySparkPI {
 
         /**
           * 蒙特卡洛算法 概率
+          * i=> 下面是方法体 ，没有用到i 只是通过这种方式来计算n
+          * random()  范围是 0 到 1
+          * random * 2  0 到 2
+          * random * 2 -1  是 -1 到 1
+          * x*x +y*y   平方半径
+          * x*x +y*y <1  在圆内 是1  在圆外是 0
+          * .reduce(_+_) 相邻的2个数累加
           */
 
         def random : Double =java.lang.Math.random()
