@@ -20,7 +20,7 @@ object SparkPageRank {
     val links = lines.map {
       s =>
       val parts = s.split("\\s+")
-      (parts(0), parts(1))
+      (parts(0), parts(1))//空格的前面是0 空格的后面是1
     }.distinct().groupByKey().cache()
     links.foreach(println)
     //mapValues (1,1.0)(2,1.0) 初始值每个人的权重是1.0
