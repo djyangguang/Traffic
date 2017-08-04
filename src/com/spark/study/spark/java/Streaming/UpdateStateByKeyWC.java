@@ -1,3 +1,4 @@
+
 package com.spark.study.spark.java.Streaming;
 
 import com.google.common.base.Optional;
@@ -49,13 +50,13 @@ public class UpdateStateByKeyWC {
                     @Override
                     public Optional<Integer> call(List<Integer> values, Optional<Integer> state) throws
                             Exception {
-                       Integer newValue=0;
-                       if(state.isPresent()){
-                           newValue=state.get();
-                       }
-                       for(Integer value : values){
+                        Integer newValue=0;
+                        if(state.isPresent()){
+                            newValue=state.get();
+                        }
+                        for(Integer value : values){
                             newValue += value;
-                       }
+                        }
 
 
                         return Optional.of(newValue);
