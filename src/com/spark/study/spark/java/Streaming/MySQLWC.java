@@ -66,7 +66,7 @@ public class MySQLWC {
         //持久化
         // 每次得到当前所有单词的统计计数之后,讲其持久化以便于后续J2EE程序显示
         // 每次得到当前所有单词的统计计数之后,讲其持久化以便于后续J2EE程序显示
-       /*   wordcounts.foreachRDD(new VoidFunction<JavaPairRDD<String,Integer>>(){
+         wordcounts.foreachRDD(new VoidFunction<JavaPairRDD<String,Integer>>(){
 
             @Override
             public void call(JavaPairRDD<String, Integer> wordcountsRDD)
@@ -92,7 +92,7 @@ public class MySQLWC {
                 });
             }
 
-        });*/
+        });
         jssc.start();
         jssc.awaitTermination();
         jssc.close();
