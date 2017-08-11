@@ -23,7 +23,7 @@ public class UpdateStateByKeyWC {
     public static void main (String[] args){
         SparkConf conf = new SparkConf().setAppName("c").setMaster("local[2]");
         JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(5));
-        // ç¬¬ä¸€ç‚¹,å¦‚æœè¦ä½¿ç”¨updateStateByKeyç®—å­,å°±å¿…é¡»è®¾ç½®ä¸€ä¸ªcheckpointç›®å½•,å¼€å¯checkpointæœºåˆ¶
+        // µÚÒ»µã,Èç¹ûÒªÊ¹ÓÃupdateStateByKeyËã×Ó,¾Í±ØĞëÉèÖÃÒ»¸öcheckpointÄ¿Â¼,¿ªÆôcheckpoint»úÖÆ
         jssc.checkpoint("hdfs://node1:9000/wc_checkpoint");
         JavaReceiverInputDStream<String> lines = jssc.socketTextStream("node1",9999);
         JavaDStream<String> words = lines.flatMap(new FlatMapFunction<String, String>() {
@@ -38,15 +38,15 @@ public class UpdateStateByKeyWC {
                 return new Tuple2<String,Integer>(s,1);
             }
         });
-        // updateStateByKey,å°±å¯ä»¥å®ç°ç›´æ¥é€šè¿‡sparkç»´æŠ¤ä¸€ä»½æ¯ä¸ªå•è¯çš„å…¨å±€çš„ç»Ÿè®¡æ¬¡æ•°
+        // updateStateByKey,¾Í¿ÉÒÔÊµÏÖÖ±½ÓÍ¨¹ısparkÎ¬»¤Ò»·İÃ¿¸öµ¥´ÊµÄÈ«¾ÖµÄÍ³¼Æ´ÎÊı
 
         JavaPairDStream<String,Integer> wc = pairs.updateStateByKey(
-                // è¿™é‡Œçš„Optional,ç›¸å½“äºscalaä¸­çš„æ ·ä¾‹ç±»,å°±æ˜¯Option,å¯ä»¥ç†è§£å®ƒä»£è¡¨ä¸€ä¸ªçŠ¶æ€,å¯èƒ½ä¹‹å‰å­˜åœ¨,ä¹Ÿå¯èƒ½ä¹‹å‰ä¸å­˜åœ¨
+                // ÕâÀïµÄOptional,Ïàµ±ÓÚscalaÖĞµÄÑùÀıÀà,¾ÍÊÇOption,¿ÉÒÔÀí½âËü´ú±íÒ»¸ö×´Ì¬,¿ÉÄÜÖ®Ç°´æÔÚ,Ò²¿ÉÄÜÖ®Ç°²»´æÔÚ
 
                 new Function2<List<Integer>, Optional<Integer>, Optional<Integer>>() {
-                    // å®é™…ä¸Š,å¯¹äºæ¯ä¸ªå•è¯,æ¯æ¬¡batchè®¡ç®—çš„æ—¶å€™,éƒ½ä¼šè°ƒç”¨è¿™ä¸ªå‡½æ•°,ç¬¬ä¸€ä¸ªå‚æ•°,valuesç›¸å½“äºè¿™ä¸ªbatchä¸­,è¿™ä¸ªkeyçš„æ–°çš„å€¼,
-                    // å¯èƒ½æœ‰å¤šä¸ª,æ¯”å¦‚ä¸€ä¸ªhello,å¯èƒ½æœ‰2ä¸ª1,(hello,1) (hello,1) é‚£ä¹ˆä¼ å…¥çš„æ˜¯(1,1)
-                    // é‚£ä¹ˆç¬¬äºŒä¸ªå‚æ•°è¡¨ç¤ºçš„æ˜¯è¿™ä¸ªkeyä¹‹å‰çš„çŠ¶æ€,å…¶å®æ³›å‹çš„å‚æ•°æ˜¯ä½ è‡ªå·±æŒ‡å®šçš„
+                    // Êµ¼ÊÉÏ,¶ÔÓÚÃ¿¸öµ¥´Ê,Ã¿´Îbatch¼ÆËãµÄÊ±ºò,¶¼»áµ÷ÓÃÕâ¸öº¯Êı,µÚÒ»¸ö²ÎÊı,valuesÏàµ±ÓÚÕâ¸öbatchÖĞ,Õâ¸ökeyµÄĞÂµÄÖµ,
+                    // ¿ÉÄÜÓĞ¶à¸ö,±ÈÈçÒ»¸öhello,¿ÉÄÜÓĞ2¸ö1,(hello,1) (hello,1) ÄÇÃ´´«ÈëµÄÊÇ(1,1)
+                    // ÄÇÃ´µÚ¶ş¸ö²ÎÊı±íÊ¾µÄÊÇÕâ¸ökeyÖ®Ç°µÄ×´Ì¬,ÆäÊµ·ºĞÍµÄ²ÎÊıÊÇÄã×Ô¼ºÖ¸¶¨µÄ
                     @Override
                     public Optional<Integer> call(List<Integer> values, Optional<Integer> state) throws
                             Exception {

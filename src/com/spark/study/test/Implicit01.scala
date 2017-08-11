@@ -2,18 +2,18 @@ package com.spark.study.test
 
 /**
   * Created by yg on 2017/7/26.
-  * éšå¼è½¬æ¢ ç‰¹æ®Šçš„æ¥å£ åªæ¥å—å­¦ç”Ÿè€äºº
-  * ç±»å‹ä¸å¯¹å°è¯• éšå¼è½¬æ¢
-  * SpecialPerson èƒ½ä½¿ç”¨æ¥å£
+  * ÒşÊ½×ª»» ÌØÊâµÄ½Ó¿Ú Ö»½ÓÊÜÑ§ÉúÀÏÈË
+  * ÀàĞÍ²»¶Ô³¢ÊÔ ÒşÊ½×ª»»
+  * SpecialPerson ÄÜÊ¹ÓÃ½Ó¿Ú
   */
 class SpecialPerson(val name : String)
 class Student(val name : String)
 class Older(val name :String)
 class Teacher(val name:String)
 object Implicit01{
-  implicit def object2SpecialPerson(obj:Object):SpecialPerson={//object2SpecialPerson( ä»€ä¹ˆå¯¹è±¡è½¬æˆäº†ä»€ä¹ˆç±» é»˜è®¤çš„å†™æ³•
-    if(obj.getClass==classOf[Student]){ //lç±»ç›¸ç­‰
-      val stu =obj.asInstanceOf[Student]//ç±»è½¬æ¢
+  implicit def object2SpecialPerson(obj:Object):SpecialPerson={//object2SpecialPerson( Ê²Ã´¶ÔÏó×ª³ÉÁËÊ²Ã´Àà Ä¬ÈÏµÄĞ´·¨
+    if(obj.getClass==classOf[Student]){ //lÀàÏàµÈ
+      val stu =obj.asInstanceOf[Student]//Àà×ª»»
       new SpecialPerson(stu.name)
     }
     else if(obj.getClass==classOf[Older]){

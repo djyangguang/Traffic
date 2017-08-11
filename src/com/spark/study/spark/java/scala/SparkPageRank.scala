@@ -4,36 +4,36 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 /**
   * Created by yg on 2017/7/27.
-  * æƒé‡æœ€å¤§
+  * È¨ÖØ×î´ó
   */
 object SparkPageRank {
   def main(args: Array[String]): Unit = {
 
     val sparkConf = new SparkConf().setAppName("PageRank").setMaster("local[100]")
-    val iters = 20; //è®¡ç®—20æ¬¡ ç®—å‡ºä¸€ä¸ªæ”¶æ•›çš„å€¼ä¹Ÿè¡Œ
+    val iters = 20; //¼ÆËã20´Î Ëã³öÒ»¸öÊÕÁ²µÄÖµÒ²ĞĞ
     val ctx = new SparkContext(sparkConf)
     val lines = ctx.textFile("D:\\bigdata\\spark\\pageRank.txt")
-    //æ ¹æ®è¾¹çš„å…³ç³»æ•°æ®ç”Ÿæˆé‚»æ¥è¡¨(1,(2,3,4))(2,(1,3))..
-    //distinc()é‡å¤çš„è¾¹å»æ‰
-    //groupByKey() æ ¹æ®keyåˆ†ç»„
-    //cache() éœ€è¦ä¸åœçš„è¿­ä»£æ‰€ä»¥æŠŠè¿™æ•°æ®ç¼“å­˜
+    //¸ù¾İ±ßµÄ¹ØÏµÊı¾İÉú³ÉÁÚ½Ó±í(1,(2,3,4))(2,(1,3))..
+    //distinc()ÖØ¸´µÄ±ßÈ¥µô
+    //groupByKey() ¸ù¾İkey·Ö×é
+    //cache() ĞèÒª²»Í£µÄµü´úËùÒÔ°ÑÕâÊı¾İ»º´æ
     val links = lines.map {
       s =>
       val parts = s.split("\\s+")
-      (parts(0), parts(1))//ç©ºæ ¼çš„å‰é¢æ˜¯0 ç©ºæ ¼çš„åé¢æ˜¯1
+      (parts(0), parts(1))//¿Õ¸ñµÄÇ°ÃæÊÇ0 ¿Õ¸ñµÄºóÃæÊÇ1
     }.distinct().groupByKey().cache()
     links.foreach(println)
-    //mapValues (1,1.0)(2,1.0) åˆå§‹å€¼æ¯ä¸ªäººçš„æƒé‡æ˜¯1.0
+    //mapValues (1,1.0)(2,1.0) ³õÊ¼ÖµÃ¿¸öÈËµÄÈ¨ÖØÊÇ1.0
     var ranks = links.mapValues(v => 1.0)
     ranks.foreach(println);
     for (i <- 1 to iters) {
-      //(1,((2.3.4.5),1.0)) ä¸€ä¸ªäººçš„å¥½å‹åˆ—è¡¨ åŠ ä¸Šåˆå§‹å€¼
+      //(1,((2.3.4.5),1.0)) Ò»¸öÈËµÄºÃÓÑÁĞ±í ¼ÓÉÏ³õÊ¼Öµ
       /**
-        * join :2ä¸ªRDDå¯ä»¥åˆæˆä¸€ä¸ª
+        * join :2¸öRDD¿ÉÒÔºÏ³ÉÒ»¸ö
         * .values=((2.3.4.5),1.0))
-        * case (urls, rank)  å¦‚æœä¸æ˜¯è¿™æ ·çš„æ ¼å¼(1,2,3),1.0 å°±ä¸åœ¨æ–¹æ³•é‡Œæ‰§è¡Œ
+        * case (urls, rank)  Èç¹û²»ÊÇÕâÑùµÄ¸ñÊ½(1,2,3),1.0 ¾Í²»ÔÚ·½·¨ÀïÖ´ĞĞ
         *  urls.size= (2.3.4.5)
-        *  urls.map(url => (url, rank / size)) æ“ä½œ (2.3.4.5)å˜æˆå…ƒç¥–
+        *  urls.map(url => (url, rank / size)) ²Ù×÷ (2.3.4.5)±ä³ÉÔª×æ
         *  rank / size = 1.0 /4
         */
       val contribs = links.join(ranks).values.flatMap { case (urls, rank) =>
@@ -41,7 +41,7 @@ object SparkPageRank {
         urls.map(url => (url, rank / size))
 
       }
-      //æŠŠæ‰€æœ‰å¯¹ 2.3.4.5 çš„è´¡çŒ®éƒ½è¦è®¡ç®—å‡ºæ¥ è¿™ä¸ªå€¼æ¥è®¡ç®— ï¼ˆurl, rank / size)
+      //°ÑËùÓĞ¶Ô 2.3.4.5 µÄ¹±Ï×¶¼Òª¼ÆËã³öÀ´ Õâ¸öÖµÀ´¼ÆËã £¨url, rank / size)
       ranks = contribs.reduceByKey(_ + _).mapValues(0.15 + 0.85 * _)
     }
     val output = ranks.collect()

@@ -17,16 +17,16 @@ import java.util.List;
 
 /**
  * Created by yg on 2017/8/4.
- * æ¯éš”10ç§’æŠŠä¹‹å‰1åˆ†é’Ÿçš„æ”¶é›†çš„æ—¥å¿—è®¡æ•°
+ * Ã¿¸ô10Ãë°ÑÖ®Ç°1·ÖÖÓµÄÊÕ¼¯µÄÈÕÖ¾¼ÆÊı
  */
 public class WindowBasedTopWC {
     public static void main(String[] args) {
         SparkConf conf = new SparkConf().setAppName("wordcount").setMaster("local[2]");
         JavaStreamingContext jssc = new JavaStreamingContext(conf,Durations.seconds(5));
 
-        // è¿™é‡Œæ—¥å¿—ç®€åŒ–, yasaka hello, lily world,è¿™é‡Œæ—¥å¿—ç®€åŒ–ä¸»è¦æ˜¯å­¦ä¹ æ€ä¹ˆä½¿ç”¨Spark Streamingçš„
+        // ÕâÀïÈÕÖ¾¼ò»¯, yasaka hello, lily world,ÕâÀïÈÕÖ¾¼ò»¯Ö÷ÒªÊÇÑ§Ï°ÔõÃ´Ê¹ÓÃSpark StreamingµÄ
         JavaReceiverInputDStream<String> searchLog = jssc.socketTextStream("spark001", 9999);
-        // å°†æœç´¢æ—¥å¿—è½¬æ¢æˆåªæœ‰ä¸€ä¸ªæœç´¢è¯å³å¯
+        // ½«ËÑË÷ÈÕÖ¾×ª»»³ÉÖ»ÓĞÒ»¸öËÑË÷´Ê¼´¿É
         JavaDStream<String> searchWordDStream = searchLog.map(new Function<String,String>(){
 
             private static final long serialVersionUID = 1L;
@@ -38,7 +38,7 @@ public class WindowBasedTopWC {
 
         });
 
-        // å°†æœç´¢è¯æ˜ å°„ä¸º(searchWord, 1)çš„Tupleæ ¼å¼
+        // ½«ËÑË÷´ÊÓ³ÉäÎª(searchWord, 1)µÄTuple¸ñÊ½
         JavaPairDStream<String, Integer> searchWordPairDStream = searchWordDStream.mapToPair(new PairFunction<String,String,Integer>(){
 
             private static final long serialVersionUID = 1L;
@@ -62,8 +62,8 @@ public class WindowBasedTopWC {
 
                 }, Durations.seconds(60), Durations.seconds(10));
 
-        // åˆ°è¿™é‡Œå°±å·²ç»æ¯éš”10ç§’æŠŠä¹‹å‰60ç§’æ”¶é›†åˆ°çš„å•è¯ç»Ÿè®¡è®¡æ•°,12ä¸ªRDD é—´éš”5ç§’åˆ‡å‰²RDD 1åˆ†é’Ÿ ä¹Ÿå°±12ä¸ªRDD,æ‰§è¡Œtransformæ“ä½œå› ä¸ºä¸€ä¸ªçª—å£60ç§’æ•°æ®ä¼šå˜æˆä¸€ä¸ªRDD
-        // ç„¶åå¯¹è¿™ä¸€ä¸ªRDDæ ¹æ®æ¯ä¸ªæœç´¢è¯å‡ºç°é¢‘ç‡è¿›è¡Œæ’åºç„¶åè·å–æ’åå‰3çƒ­ç‚¹æœç´¢è¯,è¿™é‡Œä¸ç”¨transformç”¨transformToPairè¿”å›å°±æ˜¯é”®å€¼å¯¹
+        // µ½ÕâÀï¾ÍÒÑ¾­Ã¿¸ô10Ãë°ÑÖ®Ç°60ÃëÊÕ¼¯µ½µÄµ¥´ÊÍ³¼Æ¼ÆÊı,12¸öRDD ¼ä¸ô5ÃëÇĞ¸îRDD 1·ÖÖÓ Ò²¾Í12¸öRDD,Ö´ĞĞtransform²Ù×÷ÒòÎªÒ»¸ö´°¿Ú60ÃëÊı¾İ»á±ä³ÉÒ»¸öRDD
+        // È»ºó¶ÔÕâÒ»¸öRDD¸ù¾İÃ¿¸öËÑË÷´Ê³öÏÖÆµÂÊ½øĞĞÅÅĞòÈ»ºó»ñÈ¡ÅÅÃûÇ°3ÈÈµãËÑË÷´Ê,ÕâÀï²»ÓÃtransformÓÃtransformToPair·µ»Ø¾ÍÊÇ¼üÖµ¶Ô
         JavaPairDStream<String,Integer> finalDStream = searchWordCountsDStream.transformToPair(
                 new Function<JavaPairRDD<String,Integer>,JavaPairRDD<String, Integer>>(){
 
@@ -72,7 +72,7 @@ public class WindowBasedTopWC {
                     @Override
                     public JavaPairRDD<String, Integer> call(
                             JavaPairRDD<String, Integer> searchWordCountsRDD) throws Exception {
-                        // åè½¬ç„¶åè¿›è¡Œæ’åº
+                        // ·´×ªÈ»ºó½øĞĞÅÅĞò
                         JavaPairRDD<Integer,String> countSearchWordsRDD = searchWordCountsRDD
                                 .mapToPair(new PairFunction<Tuple2<String,Integer>,Integer,String>(){
 
@@ -87,8 +87,8 @@ public class WindowBasedTopWC {
                                 });
 
                         JavaPairRDD<Integer,String> sortedCountSearchWordsRDD = countSearchWordsRDD.
-                                sortByKey(false); //æ’åº
-                            //åœ¨ç¿»è½¬å›æ¥
+                                sortByKey(false); //ÅÅĞò
+                            //ÔÚ·­×ª»ØÀ´
                         JavaPairRDD<String,Integer> sortedSearchWordsRDD = sortedCountSearchWordsRDD
                                 .mapToPair(new PairFunction<Tuple2<Integer,String>,String,Integer>(){
 
@@ -111,7 +111,7 @@ public class WindowBasedTopWC {
 
                 }	);
 
-        // è¿™ä¸ªæ— å…³ç´§è¦,åªæ˜¯ä¸ºäº†è§¦å‘jobçš„æ‰§è¡Œ,æ‰€ä»¥å¿…é¡»æœ‰actionæ“ä½œ
+        // Õâ¸öÎŞ¹Ø½ôÒª,Ö»ÊÇÎªÁË´¥·¢jobµÄÖ´ĞĞ,ËùÒÔ±ØĞëÓĞaction²Ù×÷
         finalDStream.print();
 
         jssc.start();

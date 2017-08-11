@@ -18,7 +18,7 @@ import scala.collection.mutable.ArrayBuffer
  */
 object TrainLRwithLBFGS {
 
-    val sparkConf = new SparkConf().setAppName("Beijing traffic").setMaster("local")
+    val sparkConf = new SparkConf().setAppName("laoY traffic").setMaster("local")
     val sc = new SparkContext(sparkConf)
 
     // create the date/time formatters
@@ -28,13 +28,13 @@ object TrainLRwithLBFGS {
     def main(args: Array[String]) {
 
         // fetch data from redis
-        val jedis = RedisClient.pool.getResource
+        val jedis = RedisClient.pool.getResource //Hbase
         jedis.select(1)
 
         // find relative road monitors for specified road
         // val camera_ids = List("310999003001","310999003102","310999000106","310999000205","310999007204")
         val camera_ids = List("310999003001","310999003102")
-        val camera_relations:Map[String,Array[String]] = Map[String,Array[String]](
+        val camera_relations:Map[String,Array[String]] = Map[String,Array[String]]( //一个路段的影响它的相关路段
             "310999003001" -> Array("310999003001","310999003102","310999000106","310999000205","310999007204"),
             "310999003102" -> Array("310999003001","310999003102","310999000106","310999000205","310999007204")
         )
@@ -45,28 +45,29 @@ object TrainLRwithLBFGS {
             val now = new Date(nowtimelong)
             val day = dayFormat.format(now)
             // Option Some None
+            //卡扣相关路段的列表
             val list = camera_relations.get(camera_id).get
 
             val relations = list.map({ camera_id =>
                 println(camera_id)
                 // fetch records of one camera for three hours ago
-                (camera_id, jedis.hgetAll(day + "_" + camera_id))
+                (camera_id, jedis.hgetAll(day + "_" + camera_id))//取一天卡扣的全部数据 key 卡扣id value:一天的每分钟数据
 
             })
 
             relations.foreach(println)
 
             // organize above records per minute to train data set format (MLUtils.loadLibSVMFile)
-            val trainSet = ArrayBuffer[LabeledPoint]()
+            val trainSet = ArrayBuffer[LabeledPoint]()//等于 AttayList LabeledPoint 做回归使用的类型
             // start begin at index 3
-            for(i <- Range(60*hours-3,0,-1)){
+            for(i <- Range(60*hours-3,0,-1)){// 180 到1 循环 ；往训练集中填每行的数据 180行  -1 没有0
 
-                val featuresX = ArrayBuffer[Double]()
-                val featureY = ArrayBuffer[Double]()
+                val featuresX = ArrayBuffer[Double]() //平均速度 x0~Xn
+                val featureY = ArrayBuffer[Double]()//Y 一个数
                 // get current minute and recent two minutes
-                for(index <- 0 to 2){
+                for(index <- 0 to 2){ //3ge 时段的相关数据 3维数据
 
-                    val tempOne = nowtimelong - 60 * 1000 * (i-index)
+                    val tempOne = nowtimelong - 60 * 1000 * (i-index)//当前时间－180分钟 前3小时
                     val d = new Date(tempOne)
                     val tempMinute = minuteFormat.format(d)
                     val tempNext = tempOne - 60 * 1000 * (-1)
@@ -96,7 +97,7 @@ object TrainLRwithLBFGS {
                 if(featureY.toArray.length == 1 ){
                     val label = (featureY.toArray).head
                     val record = LabeledPoint(if ((label.toInt/10)<10) (label.toInt/10) else 10.0, Vectors.dense(featuresX.toArray))
-//                    println(record)
+                    //                    println(record)
                     trainSet += record
                 }
             }
@@ -114,9 +115,9 @@ object TrainLRwithLBFGS {
             if(!data.isEmpty()){
 
                 // Run training algorithm to build the model
-                val model = new LogisticRegressionWithLBFGS()
-                        .setNumClasses(11)
-                        .run(data)
+                val model = new LogisticRegressionWithLBFGS() //逻辑回归
+                  .setNumClasses(11)
+                  .run(data)
 
                 // Compute raw scores on the test set.
                 val predictionAndLabels = test.map { case LabeledPoint(label, features) =>
@@ -145,3 +146,4 @@ object TrainLRwithLBFGS {
         RedisClient.pool.returnResource(jedis)
     }
 }
+

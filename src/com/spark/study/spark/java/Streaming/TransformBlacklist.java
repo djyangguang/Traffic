@@ -5,7 +5,6 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
-import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.Durations;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaPairDStream;
@@ -25,23 +24,23 @@ public class TransformBlacklist {
 
     public static void main(String[] args) {
         SparkConf conf = new SparkConf().setAppName("wordcount").setMaster("local[2]");
-        JavaStreamingContext jssc = new JavaStreamingContext(conf,Durations.seconds(5));
+        JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(5));
 
-        // ç”¨æˆ·å¯¹æˆ‘ä»¬ç½‘ç«™ä¸Šçš„å¹¿å‘Šå¯ä»¥è¿›è¡Œç‚¹å‡»,ç‚¹å‡»ä¹‹åæ˜¯ä¸æ˜¯è¦è¿›è¡Œå®æ—¶è®¡è´¹,ä½†æ˜¯å¯¹äºåˆ·å¹¿å‘Šçš„äºº,æˆ‘ä»¬æœ‰ä¸€ä¸ªé»‘åå•
-        // åªè¦æ˜¯é»‘åå•ä¸­çš„ç”¨æˆ·ç‚¹å‡»çš„å¹¿å‘Š,æˆ‘ä»¬å°±ç»™è¿‡æ»¤æ‰
+        // ÓÃ»§¶ÔÎÒÃÇÍøÕ¾ÉÏµÄ¹ã¸æ¿ÉÒÔ½øĞĞµã»÷,µã»÷Ö®ºóÊÇ²»ÊÇÒª½øĞĞÊµÊ±¼Æ·Ñ,µ«ÊÇ¶ÔÓÚË¢¹ã¸æµÄÈË,ÎÒÃÇÓĞÒ»¸öºÚÃûµ¥
+        // Ö»ÒªÊÇºÚÃûµ¥ÖĞµÄÓÃ»§µã»÷µÄ¹ã¸æ,ÎÒÃÇ¾Í¸ø¹ıÂËµô
 
-        // å…ˆæ¨¡æ‹Ÿä¸€ä»½é»‘åå•RDD,trueè¯´æ˜å¯ç”¨,falseè¯´æ˜ä¸å¯ç”¨
+        // ÏÈÄ£ÄâÒ»·İºÚÃûµ¥RDD,trueËµÃ÷ÆôÓÃ,falseËµÃ÷²»ÆôÓÃ
         List<Tuple2<String,Boolean>> blacklist = new ArrayList<Tuple2<String, Boolean>>();
         blacklist.add(new Tuple2<String, Boolean>("laoyang", true));
 
         @SuppressWarnings("deprecation")
-        final JavaPairRDD<String,Boolean> blacklistRDD = jssc.sc().parallelizePairs(blacklist);//æŠŠæœ¬åœ°çš„æ•°æ®è½¬æ¢æˆRDD java
-        // ä¸­æ²¡æœ‰éšå£«è½¬æ¢
+        final JavaPairRDD<String,Boolean> blacklistRDD = jssc.sc().parallelizePairs(blacklist);//°Ñ±¾µØµÄÊı¾İ×ª»»³ÉRDD java
+        // ÖĞÃ»ÓĞÒşÊ¿×ª»»
 
-        // æ—¥å¿—æœ¬èº«æ ¼å¼ç®€åŒ–,æ„æ€åˆ°äº†å°±å¯ä»¥,å°±æ˜¯date usernameçš„æ–¹å¼
+        // ÈÕÖ¾±¾Éí¸ñÊ½¼ò»¯,ÒâË¼µ½ÁË¾Í¿ÉÒÔ,¾ÍÊÇdate usernameµÄ·½Ê½
         JavaReceiverInputDStream<String> adsClickLogDStream = jssc.socketTextStream("spark001", 9999);
 
-        // æ‰€ä»¥è¦å…ˆå¯¹è¾“å…¥çš„æ•°æ®è¿›è¡Œè½¬æ¢æ“ä½œå˜æˆ (username, date username) ä»¥ä¾¿åé¢å¯¹äºæ•°æ®æµä¸­çš„RDDå’Œå®šä¹‰å¥½çš„é»‘åå•RDDè¿›è¡Œjoinæ“ä½œ
+        // ËùÒÔÒªÏÈ¶ÔÊäÈëµÄÊı¾İ½øĞĞ×ª»»²Ù×÷±ä³É (username, date username) ÒÔ±ãºóÃæ¶ÔÓÚÊı¾İÁ÷ÖĞµÄRDDºÍ¶¨ÒåºÃµÄºÚÃûµ¥RDD½øĞĞjoin²Ù×÷
         JavaPairDStream<String, String> userAdsClickLogDStream = adsClickLogDStream.mapToPair(
 
                 new PairFunction<String, String, String>(){
@@ -57,19 +56,19 @@ public class TransformBlacklist {
 
                 });
 
-        // å®æ—¶è¿›è¡Œé»‘åå•è¿‡æ»¤,æ‰§è¡Œtransformæ“ä½œ,å°†æ¯ä¸ªbatchçš„RDD,ä¸é»‘åå•RDDè¿›è¡Œjoin
+        // ÊµÊ±½øĞĞºÚÃûµ¥¹ıÂË,Ö´ĞĞtransform²Ù×÷,½«Ã¿¸öbatchµÄRDD,ÓëºÚÃûµ¥RDD½øĞĞjoin
         JavaDStream<String> validAdsClickLogDStream = userAdsClickLogDStream.transform(
-                new Function<JavaPairRDD<String,String>, JavaRDD<String>>(){ //JavaRDD<String>> æœ€åéœ€è¦çš„ç»“æœ åªéœ€è¦æ—¥å¿—
+                new Function<JavaPairRDD<String,String>, JavaRDD<String>>(){ //JavaRDD<String>> ×îºóĞèÒªµÄ½á¹û Ö»ĞèÒªÈÕÖ¾
 
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public JavaRDD<String> call(JavaPairRDD<String, String> userAdsClickLogRDD)
                             throws Exception {
-                        // è¿™é‡Œä¸ºä»€ä¹ˆæ˜¯å·¦å¤–è¿æ¥,å› ä¸ºå¹¶ä¸æ˜¯æ¯ä¸ªç”¨æˆ·éƒ½åœ¨é»‘åå•ä¸­,æ‰€ä»¥ç›´æ¥ç”¨join,é‚£ä¹ˆæ²¡æœ‰åœ¨é»‘åå•ä¸­çš„æ•°æ®,æ— æ³•joinåˆ°å°±ä¼šä¸¢å¼ƒ
-                        // stringæ˜¯ç”¨æˆ·,stringæ˜¯æ—¥å¿—,æ˜¯å¦åœ¨é»‘åå•é‡Œæ˜¯Optional
+                        // ÕâÀïÎªÊ²Ã´ÊÇ×óÍâÁ¬½Ó,ÒòÎª²¢²»ÊÇÃ¿¸öÓÃ»§¶¼ÔÚºÚÃûµ¥ÖĞ,ËùÒÔÖ±½ÓÓÃjoin,ÄÇÃ´Ã»ÓĞÔÚºÚÃûµ¥ÖĞµÄÊı¾İ,ÎŞ·¨joinµ½¾Í»á¶ªÆú
+                        // stringÊÇÓÃ»§,stringÊÇÈÕÖ¾,ÊÇ·ñÔÚºÚÃûµ¥ÀïÊÇOptional
                         JavaPairRDD<String, Tuple2<String, Optional<Boolean>>> joinedRDD =
-                                userAdsClickLogRDD.leftOuterJoin(blacklistRDD); //æŠŠé»‘åå•çš„äººè¿‡æ»¤æ‰
+                                userAdsClickLogRDD.leftOuterJoin(blacklistRDD); //°ÑºÚÃûµ¥µÄÈË¹ıÂËµô
 
 
                         JavaPairRDD<String, Tuple2<String, Optional<Boolean>>> filteredRDD =
@@ -83,7 +82,7 @@ public class TransformBlacklist {
                                             public Boolean call(
                                                     Tuple2<String, Tuple2<String, Optional<Boolean>>> tuple)
                                                     throws Exception {
-                                                // è¿™é‡Œtupleå°±æ˜¯æ¯ä¸ªç”¨æˆ·å¯¹åº”çš„è®¿é—®æ—¥å¿—å’Œåœ¨é»‘åå•ä¸­çŠ¶æ€
+                                                // ÕâÀïtuple¾ÍÊÇÃ¿¸öÓÃ»§¶ÔÓ¦µÄ·ÃÎÊÈÕÖ¾ºÍÔÚºÚÃûµ¥ÖĞ×´Ì¬
                                                 // tuple._2._2.==Tuple2<String, Optional<Boolean>>>
                                                 if(tuple._2._2.isPresent() && tuple._2._2.get()){
                                                     return false;
@@ -92,7 +91,7 @@ public class TransformBlacklist {
                                             }
 
                                         });
-                        // åˆ°æ­¤ä¸ºæ­¢,filteredRDDä¸­å°±åªå‰©ä¸‹æ²¡æœ‰è¢«è¿‡æ»¤çš„æ­£å¸¸ç”¨æˆ·äº†,ç”¨mapå‡½æ•°è½¬æ¢æˆæˆ‘ä»¬è¦çš„æ ¼å¼,æˆ‘ä»¬åªè¦ç‚¹å‡»æ—¥å¿—
+                        // µ½´ËÎªÖ¹,filteredRDDÖĞ¾ÍÖ»Ê£ÏÂÃ»ÓĞ±»¹ıÂËµÄÕı³£ÓÃ»§ÁË,ÓÃmapº¯Êı×ª»»³ÉÎÒÃÇÒªµÄ¸ñÊ½,ÎÒÃÇÖ»Òªµã»÷ÈÕÖ¾
                         JavaRDD<String> validAdsClickLogRDD = filteredRDD.map(
                                 new Function<Tuple2<String, Tuple2<String, Optional<Boolean>>>,String>(){
 
@@ -106,12 +105,12 @@ public class TransformBlacklist {
                                     }
 
                                 });
-                        return validAdsClickLogRDD; //æ ¹æ®è¿‡æ»¤æ‰é»‘åå•çš„ç‚¹å‡»æ—¥å¿—
+                        return validAdsClickLogRDD; //¸ù¾İ¹ıÂËµôºÚÃûµ¥µÄµã»÷ÈÕÖ¾
                     }
 
                 });
 
-        // è¿™åé¢å°±å¯ä»¥å†™å…¥Kafkaä¸­é—´ä»¶æ¶ˆæ¯é˜Ÿåˆ—,ä½œä¸ºå¹¿å‘Šè®¡è´¹æœåŠ¡çš„æœ‰æ•ˆå¹¿å‘Šç‚¹å‡»æ•°æ®
+        // ÕâºóÃæ¾Í¿ÉÒÔĞ´ÈëKafkaÖĞ¼ä¼şÏûÏ¢¶ÓÁĞ,×÷Îª¹ã¸æ¼Æ·Ñ·şÎñµÄÓĞĞ§¹ã¸æµã»÷Êı¾İ
         validAdsClickLogDStream.print();
 
         jssc.start();

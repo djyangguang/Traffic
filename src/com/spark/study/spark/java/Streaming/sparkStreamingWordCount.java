@@ -24,15 +24,15 @@ public class sparkStreamingWordCount {
         Logger.getLogger("org.apache.spark").setLevel(Level.WARN);
         Logger.getLogger("org.eclipse.jetty.server").setLevel(Level.OFF);
         SparkConf conf = new SparkConf().setAppName("wordcount").setMaster("local[2]");
-        // åˆ›å»ºè¯¥å¯¹è±¡å°±ç±»ä¼¼äºSpark Coreä¸­çš„JavaSparkContext,ç±»ä¼¼äºSpark SQLä¸­çš„SQLContext
-        // è¯¥å¯¹è±¡é™¤äº†æ¥å—SparkConfå¯¹è±¡,è¿˜è¦æ¥å—ä¸€ä¸ªBatch Intervalå‚æ•°,å°±æ˜¯è¯´,æ¯æ”¶é›†å¤šé•¿æ—¶é—´æ•°æ®åˆ’åˆ†ä¸€ä¸ªbatchå»è¿›è¡Œå¤„ç†
-        // è¿™é‡Œæˆ‘ä»¬çœ‹Durationsé‡Œé¢å¯ä»¥è®¾ç½®åˆ†é’Ÿã€æ¯«ç§’ã€ç§’,è¿™é‡Œè®¾ç½®ä¸€ç§’
-        JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(10)); //å¤šä¹…åˆ‡å‰²ä¸ªRDD
+        // ´´½¨¸Ã¶ÔÏó¾ÍÀàËÆÓÚSpark CoreÖĞµÄJavaSparkContext,ÀàËÆÓÚSpark SQLÖĞµÄSQLContext
+        // ¸Ã¶ÔÏó³ıÁË½ÓÊÜSparkConf¶ÔÏó,»¹Òª½ÓÊÜÒ»¸öBatch Interval²ÎÊı,¾ÍÊÇËµ,Ã¿ÊÕ¼¯¶à³¤Ê±¼äÊı¾İ»®·ÖÒ»¸öbatchÈ¥½øĞĞ´¦Àí
+        // ÕâÀïÎÒÃÇ¿´DurationsÀïÃæ¿ÉÒÔÉèÖÃ·ÖÖÓ¡¢ºÁÃë¡¢Ãë,ÕâÀïÉèÖÃÒ»Ãë
+        JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(10)); //¶à¾ÃÇĞ¸î¸öRDD
 
-        // é¦–å…ˆåˆ›å»ºè¾“å…¥DStream,ä»£è¡¨ä¸€ä¸ªæ•°æ®æºæ¯”å¦‚ä»socketæˆ–kafkaæ¥æŒç»­ä¸æ–­çš„è¿›å…¥å®æ—¶æ•°æ®æµ
-        // åˆ›å»ºä¸€ä¸ªç›‘å¬ç«¯å£çš„socketæ•°æ®æµ,è¿™é‡Œé¢å°±ä¼šæœ‰æ¯éš”ä¸€ç§’ç”Ÿæˆä¸€ä¸ªRDD,RDDçš„å…ƒç´ ç±»å‹ä¸ºStringå°±æ˜¯ä¸€è¡Œä¸€è¡Œçš„æ–‡æœ¬
-        JavaReceiverInputDStream<String> lines = jssc.socketTextStream("node1", 9999);//æ¥å—ç«¯å£çš„æ•°æ®
-        // æ¥ç€Spark Coreæä¾›çš„ç®—å­ç›´æ¥åº”ç”¨åœ¨DStreamä¸Šå³å¯,ç®—å­åº•å±‚ä¼šåº”ç”¨åœ¨é‡Œé¢çš„æ¯ä¸ªRDDä¸Šé¢,RDDè½¬æ¢åçš„æ–°RDDä¼šä½œä¸ºæ–°DStreamä¸­RDD
+        // Ê×ÏÈ´´½¨ÊäÈëDStream,´ú±íÒ»¸öÊı¾İÔ´±ÈÈç´Ósocket»òkafkaÀ´³ÖĞø²»¶ÏµÄ½øÈëÊµÊ±Êı¾İÁ÷
+        // ´´½¨Ò»¸ö¼àÌı¶Ë¿ÚµÄsocketÊı¾İÁ÷,ÕâÀïÃæ¾Í»áÓĞÃ¿¸ôÒ»ÃëÉú³ÉÒ»¸öRDD,RDDµÄÔªËØÀàĞÍÎªString¾ÍÊÇÒ»ĞĞÒ»ĞĞµÄÎÄ±¾
+        JavaReceiverInputDStream<String> lines = jssc.socketTextStream("node1", 9999);//½ÓÊÜ¶Ë¿ÚµÄÊı¾İ
+        // ½Ó×ÅSpark CoreÌá¹©µÄËã×ÓÖ±½ÓÓ¦ÓÃÔÚDStreamÉÏ¼´¿É,Ëã×Óµ×²ã»áÓ¦ÓÃÔÚÀïÃæµÄÃ¿¸öRDDÉÏÃæ,RDD×ª»»ºóµÄĞÂRDD»á×÷ÎªĞÂDStreamÖĞRDD
         JavaDStream<String> words = lines.flatMap(new FlatMapFunction<String, String>(){
 
             private static final long serialVersionUID = 1L;
@@ -66,10 +66,10 @@ public class sparkStreamingWordCount {
 
         });
 
-        // æœ€åæ¯æ¬¡è®¡ç®—å®Œ,éƒ½æ‰“å°ä¸€ä¸‹è¿™ä¸€ç§’é’Ÿçš„å•è¯è®¡æ•°æƒ…å†µ,å¹¶ä¼‘çœ 5ç§’é’Ÿ,ä»¥ä¾¿äºæˆ‘ä»¬æµ‹è¯•å’Œè§‚å¯Ÿ
+        // ×îºóÃ¿´Î¼ÆËãÍê,¶¼´òÓ¡Ò»ÏÂÕâÒ»ÃëÖÓµÄµ¥´Ê¼ÆÊıÇé¿ö,²¢ĞİÃß5ÃëÖÓ,ÒÔ±ãÓÚÎÒÃÇ²âÊÔºÍ¹Û²ì
         wordcounts.print();
 
-        // å¿…é¡»è°ƒç”¨startæ–¹æ³•,æ•´ä¸ªspark streamingåº”ç”¨æ‰ä¼šå¯åŠ¨æ‰§è¡Œ,ç„¶åå¡åœ¨é‚£é‡Œ,æœ€åcloseé‡Šæ”¾èµ„æº
+        // ±ØĞëµ÷ÓÃstart·½·¨,Õû¸öspark streamingÓ¦ÓÃ²Å»áÆô¶¯Ö´ĞĞ,È»ºó¿¨ÔÚÄÇÀï,×îºócloseÊÍ·Å×ÊÔ´
         jssc.start();
         jssc.awaitTermination();
         jssc.close();

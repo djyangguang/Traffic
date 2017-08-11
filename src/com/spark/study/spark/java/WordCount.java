@@ -29,7 +29,7 @@ public class WordCount {
         JavaPairRDD<String,Integer> pairs = words.mapToPair(new PairFunction<String, String, Integer>() {
             @Override
             public Tuple2<String, Integer> call(String s) throws Exception {
-                return new Tuple2<String,Integer>(s,1); //å…ƒç¥–é‡Œé¢2ä¸ªå€¼
+                return new Tuple2<String,Integer>(s,1); //Ôª×æÀïÃæ2¸öÖµ
             }
         });
         JavaPairRDD<String,Integer> wcs =pairs.reduceByKey(new Function2<Integer, Integer, Integer>() {
@@ -40,7 +40,7 @@ public class WordCount {
         });
         JavaPairRDD<Integer,String> tempwcs =wcs.mapToPair(new PairFunction<Tuple2<String, Integer>, Integer, String>() {
             @Override
-            //Tuple2 å…ƒç¥–é‡Œé¢æœ‰2ä¸ªå€¼å¾—æ˜¯å«tuple2 ä¸€ç›´åˆ°tuple23
+            //Tuple2 Ôª×æÀïÃæÓĞ2¸öÖµµÃÊÇ½Ğtuple2 Ò»Ö±µ½tuple23
             public Tuple2<Integer, String> call(Tuple2<String, Integer> integerIntegerTuple2) throws Exception {
                 return new Tuple2<Integer,String>(integerIntegerTuple2._2,integerIntegerTuple2._1);
             }

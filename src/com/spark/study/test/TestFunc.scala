@@ -7,7 +7,7 @@ object TestFunc {
   def sayMyname(name :String ="laoy"): Unit ={
     println(name)
   }
-  def sumMoreParameters(elem :Int*): Unit ={//å¤šä¸ªå‚æ•° Int*
+  def sumMoreParameters(elem :Int*): Unit ={//¶à¸ö²ÎÊı Int*
     var sum =0;
     for (e <- elem){
         println(e)
@@ -15,37 +15,37 @@ object TestFunc {
     }
     sum
   }
-  def add(a:Int,b:Int) =a+b //æ–¹æ³•ä½“ a+b
-  def add2 =add(_:Int,2)//ä¼ è¿›æ¥å‚æ•° å’Œ2ç´¯åŠ 
+  def add(a:Int,b:Int) =a+b //·½·¨Ìå a+b
+  def add2 =add(_:Int,2)//´«½øÀ´²ÎÊı ºÍ2ÀÛ¼Ó
   //f(n)=F(n)*f(n-1)
-  def fac(n:Int):Int =if(n<=0)1 else n*fac(n-1)//é€’å½’ é˜¶ä¹˜
-  def mulitply(x:Int)(y:Int)=x*y //å…‹é‡ŒåŒ–å‡½æ•°
+  def fac(n:Int):Int =if(n<=0)1 else n*fac(n-1)//µİ¹é ½×³Ë
+  def mulitply(x:Int)(y:Int)=x*y //¿ËÀï»¯º¯Êı
   def m2 =mulitply(2)_
-  //****åŒ¿åå‡½æ•°****/
-  val t = () => 222//ç”Ÿå‘½äº†ä¸€ä¸ªå‡½æ•°å¯¹è±¡ä»˜ç»™t
+  //****ÄäÃûº¯Êı****/
+  val t = () => 222//ÉúÃüÁËÒ»¸öº¯Êı¶ÔÏó¸¶¸øt
   val t1 =() => 1
-  //() => Int åŒ¿åå‡½æ•°çš„ç±»å‹ ä¸èƒ½ä¼ å‚æ•°çš„ è¿”å›å€¼æ˜¯Intç±»å‹  c è¦ä¼ è¿›æ¥ä¸ªåŒ¿åå‡½æ•°
-  def testfunc02(c : () => Int)={ //=æœ‰è¿”å›å€¼
-     println(c())//c() çœŸæ­£å»è°ƒç”¨ä¼ è¿›æ¥çš„å‡½æ•°
+  //() => Int ÄäÃûº¯ÊıµÄÀàĞÍ ²»ÄÜ´«²ÎÊıµÄ ·µ»ØÖµÊÇIntÀàĞÍ  c Òª´«½øÀ´¸öÄäÃûº¯Êı
+  def testfunc02(c : () => Int)={ //=ÓĞ·µ»ØÖµ
+     println(c())//c() ÕæÕıÈ¥µ÷ÓÃ´«½øÀ´µÄº¯Êı
     1000
   }
   def d1 =(a:Int)=> a+100
   //***
-  def testf1(callback :(Int,Int)=>Int)={//éœ€è¦è¿™ç§ (Int,Int)= å‚æ•° è¿”å›çš„æ˜¯Intç±»å‹
-     println(callback(123,123))//å®é™…çš„æ•°æ® ä¸æ˜¯ä¼ è¿›æ¥çš„ ä¼ è¿›æ¥æ“ä½œæ•°æ®çš„å‡½æ•°
+  def testf1(callback :(Int,Int)=>Int)={//ĞèÒªÕâÖÖ (Int,Int)= ²ÎÊı ·µ»ØµÄÊÇIntÀàĞÍ
+     println(callback(123,123))//Êµ¼ÊµÄÊı¾İ ²»ÊÇ´«½øÀ´µÄ ´«½øÀ´²Ù×÷Êı¾İµÄº¯Êı
   }
 
-  //åµŒå¥—å‡½æ•°
-  def add3(x:Int,y:Int,z:Int) : Int = { //å‰2ä¸ªå€¼ç›¸åŠ çš„ç»“æœ åœ¨å’Œç¬¬3ä¸ªæ•°ç›¸åŠ 
+  //Ç¶Ì×º¯Êı
+  def add3(x:Int,y:Int,z:Int) : Int = { //Ç°2¸öÖµÏà¼ÓµÄ½á¹û ÔÚºÍµÚ3¸öÊıÏà¼Ó
     def add2(x:Int,y:Int):Int={
       x + y
     }
     add2(add2(x,y),2)
   }
 
-  //@ f:Int => Int) å‡½æ•°è¾“å…¥çš„å‚æ•°æ˜¯ä¸ªåŒ¿åå‡½æ•° è¾“å…¥è¾“å‡ºéƒ½æ˜¯Int
-  //(Int,Int)=>Int= å‡½æ•°çš„è¿”å›ç±»å‹å‘¢
-  //=åé¢æ˜¯æ–¹æ³•ä½“
+  //@ f:Int => Int) º¯ÊıÊäÈëµÄ²ÎÊıÊÇ¸öÄäÃûº¯Êı ÊäÈëÊä³ö¶¼ÊÇInt
+  //(Int,Int)=>Int= º¯ÊıµÄ·µ»ØÀàĞÍÄØ
+  //=ºóÃæÊÇ·½·¨Ìå
   def sum(f:Int => Int):(Int,Int)=>Int ={
     def sumf(a:Int,b:Int):Int =
       if(a>b) 0 else f(a)+sumf(a+1,b)
@@ -63,7 +63,7 @@ object TestFunc {
     //println(mulitply(123)(123))
    // println(m2(123))
     //  println(testfunc02(t))
-    //testf1((a : Int ,b:Int)=>{println(a*b);a*b})//å®é™…çš„è®¡ç®—é€»è¾‘
+    //testf1((a : Int ,b:Int)=>{println(a*b);a*b})//Êµ¼ÊµÄ¼ÆËãÂß¼­
    // testf1(add)
 
     def sumf =sum((z)=>z+1)

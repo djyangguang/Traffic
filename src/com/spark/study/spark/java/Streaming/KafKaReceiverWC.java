@@ -21,16 +21,16 @@ import java.util.Map;
  * Created by yg on 2017/8/2.
  */
 public class KafKaReceiverWC {
-    //åˆ›å»ºtopice æ‰èƒ½å†™æ•°æ®
+    //´´½¨topice ²ÅÄÜĞ´Êı¾İ
     // ./bin/kafka-topics.sh --zookeeper spark001:2181,spark002:2181,spark003:81 --topic wordcount --replication-factor 1 --partitions 1 --create
     // ./bin/kafka-console-producer.sh --topic wordcount --broker-list spark001:9092,spark002:9092,spark003:9092
     public static void main (String [] args){
         SparkConf conf = new SparkConf().setAppName("s").setMaster("local[2]");
         JavaStreamingContext jssc = new JavaStreamingContext(conf,  Durations.seconds(5));
-        // è¿™ä¸ªæ¯”è¾ƒé‡è¦,æ˜¯å¯¹åº”ä½ ç»™topicç”¨å‡ ä¸ªçº¿ç¨‹å»æ‹‰å–æ•°æ®
+        // Õâ¸ö±È½ÏÖØÒª,ÊÇ¶ÔÓ¦Äã¸øtopicÓÃ¼¸¸öÏß³ÌÈ¥À­È¡Êı¾İ
         Map<String,Integer> topicThreadMap= new HashMap<String,Integer>();
         topicThreadMap.put("laoyang",1);
-        // kafkaè¿™ç§åˆ›å»ºçš„æµ,æ˜¯pairçš„å½¢å¼,æœ‰ä¿©ä¸ªå€¼,ä½†ç¬¬ä¸€ä¸ªå€¼é€šå¸¸éƒ½æ˜¯Nullå•Š
+        // kafkaÕâÖÖ´´½¨µÄÁ÷,ÊÇpairµÄĞÎÊ½,ÓĞÁ©¸öÖµ,µ«µÚÒ»¸öÖµÍ¨³£¶¼ÊÇNull°¡
         JavaPairReceiverInputDStream<String,String> lines = KafkaUtils.createStream(
                 jssc,
                 "node1:2181,node2:2181,node3:2181",

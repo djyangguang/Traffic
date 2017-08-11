@@ -3,7 +3,7 @@ package com.spark.study.spark.java;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.scalastyle.Lines;
+
 
 /**
  * Created by yg on 2017/7/26.
@@ -14,7 +14,7 @@ public class Test {
         JavaSparkContext sc = new JavaSparkContext(conf);
         JavaRDD<String> lines = sc.textFile("D:\\bigdata\\spark\\Traffic\\data\\2014082013_all_column_test.txt").cache();
         long beginTime =System.currentTimeMillis();
-        long count =lines.count();//å¯åŠ¨ä¸ªjob
+        long count =lines.count();//Æô¶¯¸öjob
         long endTime =System.currentTimeMillis();
         System.out.println("===============>cost"+(endTime-beginTime));
         beginTime=System.currentTimeMillis();

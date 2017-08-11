@@ -17,7 +17,7 @@ object KafkaEventProducer {
   // bin/kafka-topics.sh --zookeeper spark001:2181  --describe user_events
   def main(args: Array[String]): Unit = {
     val topic = "car_events"
-    val brokers = "192.168.80.201:9092,192.168.80.202:9092,192.168.80.203:9092"
+    val brokers = "node1:9092,node2:9092,node3:9092"
     val props = new Properties()
     props.put("metadata.broker.list", brokers)
     props.put("serializer.class", "kafka.serializer.StringEncoder")
@@ -25,7 +25,7 @@ object KafkaEventProducer {
     val kafkaConfig = new ProducerConfig(props)
     val producer = new Producer[String, String](kafkaConfig)
 
-    val sparkConf = new SparkConf().setAppName("Beijing traffic").setMaster("local[4]")
+    val sparkConf = new SparkConf().setAppName("ygtraffic").setMaster("local[4]")
     val sc = new SparkContext(sparkConf)
 
 //    val filePath = "D:/traffic/trafficlf_all_column_all.txt"

@@ -63,9 +63,9 @@ public class MySQLWC {
                         return Optional.of(newValue);
                     }
                 });
-        //持久化
-        // 每次得到当前所有单词的统计计数之后,讲其持久化以便于后续J2EE程序显示
-        // 每次得到当前所有单词的统计计数之后,讲其持久化以便于后续J2EE程序显示
+        //�־û�
+        // ÿ�εõ���ǰ���е��ʵ�ͳ�Ƽ���֮��,����־û��Ա��ں���J2EE������ʾ
+        // ÿ�εõ���ǰ���е��ʵ�ͳ�Ƽ���֮��,����־û��Ա��ں���J2EE������ʾ
          wordcounts.foreachRDD(new VoidFunction<JavaPairRDD<String,Integer>>(){
 
             @Override

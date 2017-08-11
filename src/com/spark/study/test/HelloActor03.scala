@@ -11,7 +11,7 @@ class Laoyang extends Actor {
     while (true) {
       receive {
         case Message(content, sender) => {
-          println("æˆ‘æ”¶åˆ°")
+          println("ÎÒÊÕµ½")
         }
       }
     }
@@ -20,7 +20,7 @@ class Laoyang extends Actor {
 }
   class Laoyang01Actor(val laoyang: Laoyang) extends Actor{
     override def act(): Unit = {
-        laoyang ! Message("aaa",this)//ç»™laoyangå‘æ¶ˆæ¯
+        laoyang ! Message("aaa",this)//¸ølaoyang·¢ÏûÏ¢
       while (true){
         receive{
           case response : String =>print("lao"+response)

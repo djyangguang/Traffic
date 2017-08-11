@@ -2,29 +2,30 @@ package com.spark.study.spark.java.scala
 
 import org.apache.spark.{SparkConf, SparkContext}
 
+
 /**
   * Created by yg on 2017/7/27.
   */
 object MySparkPI {
   def main(args: Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("Spark Pi")
-    val spark = new SparkContext("local[2]","Spark Pi") //
+    val conf = new SparkConf().setAppName("Spark Pi").setMaster("local[1]")
+    val spark = new SparkContext(conf) //
     val slices =10;
     val n =1000*slices
-        //parallelize() æœ¬åœ°çš„æ•°æ®é›†åˆå¹¶è¡ŒåŒ–
-    //1åˆ°10000å¹¶è¡Œåˆ°10ä¸ªé‡Œé¢å» æ¯ä¸ªè·‘ 1000
+        //parallelize() ±¾µØµÄÊı¾İ¼¯ºÏ²¢ĞĞ»¯
+    //1µ½10000²¢ĞĞµ½10¸öÀïÃæÈ¥ Ã¿¸öÅÜ 1000
     val count =spark.parallelize(1 to n,slices).map({
       i=>
 
         /**
-          * è’™ç‰¹å¡æ´›ç®—æ³• æ¦‚ç‡
-          * i=> ä¸‹é¢æ˜¯æ–¹æ³•ä½“ ï¼Œæ²¡æœ‰ç”¨åˆ°i åªæ˜¯é€šè¿‡è¿™ç§æ–¹å¼æ¥è®¡ç®—n
-          * random()  èŒƒå›´æ˜¯ 0 åˆ° 1
-          * random * 2  0 åˆ° 2
-          * random * 2 -1  æ˜¯ -1 åˆ° 1
-          * x*x +y*y   å¹³æ–¹åŠå¾„
-          * x*x +y*y <1  åœ¨åœ†å†… æ˜¯1  åœ¨åœ†å¤–æ˜¯ 0
-          * .reduce(_+_) ç›¸é‚»çš„2ä¸ªæ•°ç´¯åŠ 
+          * ÃÉÌØ¿¨ÂåËã·¨ ¸ÅÂÊ
+          * i=> ÏÂÃæÊÇ·½·¨Ìå £¬Ã»ÓĞÓÃµ½i Ö»ÊÇÍ¨¹ıÕâÖÖ·½Ê½À´¼ÆËãn
+          * random()  ·¶Î§ÊÇ 0 µ½ 1
+          * random * 2  0 µ½ 2
+          * random * 2 -1  ÊÇ -1 µ½ 1
+          * x*x +y*y   Æ½·½°ë¾¶
+          * x*x +y*y <1  ÔÚÔ²ÄÚ ÊÇ1  ÔÚÔ²ÍâÊÇ 0
+          * .reduce(_+_) ÏàÁÚµÄ2¸öÊıÀÛ¼Ó
           */
 
         def random : Double =java.lang.Math.random()

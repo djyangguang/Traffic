@@ -2,7 +2,7 @@ package com.spark.study.test
 
 /**
   * Created by yg on 2017/7/26.
-  * éšå£«å‚æ•°
+  * ÒşÊ¿²ÎÊı
   */
 class SingnPen{
   def write(content :String) =println(content)
@@ -10,15 +10,15 @@ class SingnPen{
 object ImplicitContext{
   implicit  val singnPen = new SingnPen
 }
-//è‡ªå·±å¸¦ç¬”å’Œä½¿ç”¨å…¬ç”¨çš„ç¬”
+//×Ô¼º´ø±ÊºÍÊ¹ÓÃ¹«ÓÃµÄ±Ê
 object Implicit02 {
-  def  signForExam(name:String)(implicit singnPen: SingnPen): Unit ={//å…‹é‡ŒåŒ– åå­—æ˜¯ ç¬”æ˜¯å…¬ç”¨çš„
+  def  signForExam(name:String)(implicit singnPen: SingnPen): Unit ={//¿ËÀï»¯ Ãû×ÖÊÇ ±ÊÊÇ¹«ÓÃµÄ
     singnPen.write(name +"VBVCVCV")
   }
 
   def main(args: Array[String]): Unit = {
-    import ImplicitContext._ //è¿™æ˜¯æŠŠ singnPen å®šä¹‰åˆ°å¤–è¾¹
-    //ä¹Ÿå¯ä»¥è¿™æ ·
+    import ImplicitContext._ //ÕâÊÇ°Ñ singnPen ¶¨Òåµ½Íâ±ß
+    //Ò²¿ÉÒÔÕâÑù
     //val singnPen = new SingnPen
     //signForExam("laoyang")(singnPen)
     signForExam("laoyang")

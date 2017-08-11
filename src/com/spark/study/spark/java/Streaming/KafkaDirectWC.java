@@ -21,22 +21,22 @@ import java.util.*;
  *
  */
 
-//è¿™ä¸ªå¥½
+//Õâ¸öºÃ
 public class KafkaDirectWC {
     public static void main (String[] args){
         SparkConf conf = new SparkConf().setAppName("c").setMaster("local[1]");
         JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(5));
-        // æˆ‘ä»¬è¿™é‡Œæ˜¯ä¸éœ€è¦zookeeperèŠ‚ç‚¹çš„å•Š,æ‰€ä»¥æˆ‘ä»¬è¿™é‡Œæ”¾broker.list
+        // ÎÒÃÇÕâÀïÊÇ²»ĞèÒªzookeeper½ÚµãµÄ°¡,ËùÒÔÎÒÃÇÕâÀï·Åbroker.list
         Map<String,String> kafkaParams = new HashMap<String,String>();
-        // ç„¶ååˆ›å»ºä¸€ä¸ªset,é‡Œé¢æ”¾å…¥ä½ è¦è¯»å–çš„Topic,è¿™ä¸ªå°±æ˜¯æˆ‘ä»¬æ‰€è¯´çš„,å®ƒç»™ä½ åšçš„å¾ˆå¥½,å¯ä»¥å¹¶è¡Œè¯»å–å¤šä¸ªtopic
+        // È»ºó´´½¨Ò»¸öset,ÀïÃæ·ÅÈëÄãÒª¶ÁÈ¡µÄTopic,Õâ¸ö¾ÍÊÇÎÒÃÇËùËµµÄ,Ëü¸øÄã×öµÄºÜºÃ,¿ÉÒÔ²¢ĞĞ¶ÁÈ¡¶à¸ötopic
         kafkaParams.put("metadata.broker.list","node1:9092,node2:9092,node3:9092");
         Set<String> topics = new HashSet<String>();
         topics.add("laoyang");
         JavaPairInputDStream<String,String> lines = KafkaUtils.createDirectStream(
                 jssc,
-                String.class, // keyç±»å‹
-                String.class, // valueç±»å‹
-                StringDecoder.class, // è§£ç å™¨
+                String.class, // keyÀàĞÍ
+                String.class, // valueÀàĞÍ
+                StringDecoder.class, // ½âÂëÆ÷
                 StringDecoder.class,
                 kafkaParams,
                 topics

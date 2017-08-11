@@ -6,23 +6,23 @@ package com.spark.study.test
 object TestCollection {
   def main(args: Array[String]): Unit = {
      var t =List(1,2,3)
-    //println(t(2)) //ä¸‹æ ‡ä»0å¼€å§‹
-    println(t.map(a=>{println(a);a+2}))//List(3, 4, 5) //ä¸å¸¸ç”¨å¤ªé•¿
-    println(t.map(_+1))//_æ¯ä¸ªå…ƒç´ 
+    //println(t(2)) //ÏÂ±ê´Ó0¿ªÊ¼
+    println(t.map(a=>{println(a);a+2}))//List(3, 4, 5) //²»³£ÓÃÌ«³¤
+    println(t.map(_+1))//_Ã¿¸öÔªËØ
     var t2 =t.+:("test")
    // println(t2)//List(test, 1, 2, 3)
     t2 =t::6::Nil
     println(t2) //List(List(1, 2, 3), 6)
     t2.foreach(t=>print(t))
-    println(t.distinct)//å»é‡
-    println(t.slice(0,2))//åˆ‡åˆ†
+    println(t.distinct)//È¥ÖØ
+    println(t.slice(0,2))//ÇĞ·Ö
     println(t./:(0)({//   /:
       (sum,num)=>print(sum+"=="+num);
         sum+num
     }));
 
-    //å…ƒç¥–
-    var tuple01 = (1,2,3); //index ä»1å¼€å§‹
-    println(tuple01._1)//._1) å–å€¼
+    //Ôª×æ
+    var tuple01 = (1,2,3); //index ´Ó1¿ªÊ¼
+    println(tuple01._1)//._1) È¡Öµ
   }
 }
