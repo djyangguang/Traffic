@@ -88,7 +88,9 @@ object PageRank02{
   def transfer(sc:SparkContext,path:String):RDD[String]={
     sc.hadoopFile(path,classOf[TextInputFormat],classOf[LongWritable],classOf[Text],1)
       .map(p => new String(p._2.getBytes, 0, p._2.getLength, "GBK"))
-
+    /**
+      *
+      */
 
   }
 
