@@ -16,6 +16,7 @@ object TestFunc {
     sum
   }
   def add(a:Int,b:Int) =a+b //方法体 a+b
+
   def add2 =add(_:Int,2)//传进来参数 和2累加
   //f(n)=F(n)*f(n-1)
   def fac(n:Int):Int =if(n<=0)1 else n*fac(n-1)//递归 阶乘
@@ -30,6 +31,7 @@ object TestFunc {
     1000
   }
   def d1 =(a:Int)=> a+100
+
   //***
   def testf1(callback :(Int,Int)=>Int)={//需要这种 (Int,Int)= 参数 返回的是Int类型
      println(callback(123,123))//实际的数据 不是传进来的 传进来操作数据的函数

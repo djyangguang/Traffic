@@ -26,6 +26,7 @@ public class TransformBlacklist {
         SparkConf conf = new SparkConf().setAppName("wordcount").setMaster("local[2]");
         JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(5));
 
+
         // 用户对我们网站上的广告可以进行点击,点击之后是不是要进行实时计费,但是对于刷广告的人,我们有一个黑名单
         // 只要是黑名单中的用户点击的广告,我们就给过滤掉
 
